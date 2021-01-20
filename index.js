@@ -3,7 +3,7 @@ const express = require("express");
 const cars = require("./cars.js");
 const bodyParser = require("body-parser");
 const app = express();
-const { body, param, validationResult } = require('express-validator');
+const { body, param, validationResult, query } = require('express-validator');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,7 +41,8 @@ const checkToken = ({query: {token}}, res, next) => {
   else next();
 }
 
-app.all("/", body("token").exists(), checkToken)
+//applichiamo il metodo di express-validator per verificare che il token esista sempre, e il middleware per verificarne la correttezza
+app.all("/", query("token").exists(), checkToken)
 
 //liste auto a seconda della query
 app.get("/cars", ({ query: {availability} }, res) => {
